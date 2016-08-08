@@ -1,0 +1,35 @@
+{
+  "name": "hackertyper-desktop-application",
+  "version": "1.0.0",
+  "description": "A HackerTyper Desktop Application based on hackertyper.net",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "build --dir",
+    "dist": "build"
+  },
+  "keywords": [
+    "Electron",
+    "hacking",
+    "hackertyper",
+    "emulator"
+  ],
+  "author": "Pandemic Moon",
+  "license": "CC-BY-NC-SA-3.0",
+  "bugs": {
+    "url": "https://github.com/electron/electron-quick-start/issues"
+  },
+  "homepage": "http://hackertyper.net",
+  "repository": "https://github.com/PandemicMoon/hackertyper",
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.0"
+  },
+  "build": {
+    "appId": "com.electron.${name}",
+    "app-category-type": "public.app-category.developer-tools",
+    "productName": "HackerTyper",
+    "win": {
+      "iconUrl": ""
+    }
+  }
+}
