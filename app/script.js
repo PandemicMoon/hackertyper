@@ -1,3 +1,47 @@
+const ipc = require('electron').ipcRenderer;
+const alertify = require('./js/alertify.js');
+
+var alertOpen = false;
+
+ipc.on('show-set-speed', function(event)
+{
+    alertOpen = true;
+    alertify.defaultValue("" + Typer.speed).prompt("",
+        function(val, ev)
+        {
+            // The click event is in the event variable, so you can use it here.
+            ev.preventDefault();
+            if (isNaN(val))
+            {
+                alertify.closeLogOnClick(true).error("Please enter a number");
+            }
+            else
+            {
+                let speed = parseInt(val);
+                alertify.closeLogOnClick(true).success("Speed set to " + speed);
+                Typer.speed = speed;
+                ipc.send("set-speed", speed);
+            }
+            alertOpen = false;
+        },
+        function(ev)
+        {
+            // The click event is in the event variable, so you can use it here.
+            ev.preventDefault();
+            alertOpen = false;
+        });
+});
+
+ipc.on('show-speed', function(event)
+{
+    alertify.closeLogOnClick(true).success("Speed: " + Typer.speed);
+});
+
+ipc.on('set-speed', function(event, speed)
+{
+    Typer.speed = parseInt(speed);
+});
+
 /*
  *(c) Copyright 2011 Simone Masiero. Some Rights Reserved.
  *This work is licensed under a Creative Commons Attribution-Noncommercial-Share Alike 3.0 License
@@ -6,7 +50,7 @@
 $(
     function()
     {
-        $(document).keydown(
+        $("body").keydown(
             function(event)
             {
                 Typer.addText(event); //Capture the keydown event and call the addText, this is executed on page load
@@ -25,6 +69,8 @@ var Typer = {
     deniedCount: 0, //times caps is pressed for Access Denied
     init: function()
     { // inizialize Hacker Typer
+        if (Typer.file === 'txt/kernel.txt')
+            Typer.file = __dirname + "/" + Typer.file;
         accessCountimer = setInterval(function()
         {
             Typer.updLstChr();
@@ -116,7 +162,7 @@ var Typer = {
         { //key 112-123 = F* keys
             //do nothing
         }
-        else if (Typer.text)
+        else if (Typer.text && !alertOpen)
         { // otherway if text is loaded
             var cont = Typer.content(); // get the console content
             if (cont.substring(cont.length - 1, cont.length) == "|") // if the last char is the blinking cursor
@@ -139,14 +185,15 @@ var Typer = {
             var rtt = new RegExp("\\t", "g"); // tab regex
             $("#console").html(text.replace(rtn, "<br/>").replace(rtt, "&nbsp;&nbsp;&nbsp;&nbsp;").replace(rts, "&nbsp;")); // replace newline chars with br, tabs with 4 space and blanks with an html blank
             window.scrollBy(0, 50); // scroll to make sure bottom is always visible
-        }
-        if (key.preventDefault && key.keyCode != 122)
-        { // prevent F11(fullscreen) from being blocked
-            key.preventDefault();
-        };
-        if (key.keyCode != 122)
-        { // otherway prevent keys default behavior
-            key.returnValue = false;
+
+            if (key.preventDefault && key.keyCode != 122)
+            { // prevent F11(fullscreen) from being blocked
+                key.preventDefault();
+            };
+            if (key.keyCode != 122)
+            { // otherway prevent keys default behavior
+                key.returnValue = false;
+            }
         }
     },
 

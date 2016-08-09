@@ -1,6 +1,6 @@
 {
   "name": "hackertyper-desktop-application",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A HackerTyper Desktop Application based on hackertyper.net",
   "main": "main.js",
   "scripts": {

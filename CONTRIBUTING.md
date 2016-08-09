@@ -12,5 +12,3 @@ npm install && npm start
 # Build application for your specific platform
 npm build
 ```
-
-Learn more about the technology used to build the HackerTyper Desktop Application on the project's website.

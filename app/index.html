@@ -13,6 +13,11 @@
 
         <link href="style.css" rel="stylesheet" type="text/css">
 
+    </head>
+
+    <body cz-shortcut-listen="true">
+        <div id="console">|</div>
+
         <script src="jquery.min.js" type="text/javascript"></script>
 
         <script src="script.js" type="text/javascript"></script>
@@ -20,15 +25,10 @@
         <script type="text/javascript">
             Typer.speed = parseInt(getQuery("speed")) || 3;
 
-            Typer.file = getQuery("file") || 'https://raw.githubusercontent.com/PandemicMoon/hackertyper/master/txt/kernel.txt';
+            Typer.file = getQuery("file") || 'txt/kernel.txt';
 
             Typer.init();
         </script>
-
-    </head>
-
-    <body cz-shortcut-listen="true">
-        <div id="console">|</div>
     </body>
 
 </html>
