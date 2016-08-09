@@ -9,7 +9,7 @@ git clone https://github.com/PandemicMoon/hackertyper
 cd hackertyper
 # Install dependencies and run the app
 npm install && npm start
-# Build package after modification
+# Build application for your specific platform
 npm build
 ```
 

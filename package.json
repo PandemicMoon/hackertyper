@@ -1,12 +1,13 @@
 {
   "name": "hackertyper-desktop-application",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "A HackerTyper Desktop Application based on hackertyper.net",
   "main": "main.js",
   "scripts": {
+    "postinstall": "install-app-deps",
     "start": "electron .",
-    "pack": "build --dir",
-    "dist": "build"
+    "pack": "node_modules/.bin/build --x64 --ia32 --dir",
+    "dist": "node_modules/.bin/build --x64 --ia32"
   },
   "keywords": [
     "Electron",
@@ -14,22 +15,28 @@
     "hackertyper",
     "emulator"
   ],
-  "author": "Pandemic Moon",
+  "author": {
+      "name" : "Pandemic Moon",
+      "email": "pandemic@moon-network.net",
+      "url": "https://github.com/PandemicMoon"
+  },
   "license": "CC-BY-NC-SA-3.0",
   "bugs": {
-    "url": "https://github.com/electron/electron-quick-start/issues"
+    "url": "https://github.com/PandemicMoon/hackertyper/issues"
   },
   "homepage": "http://hackertyper.net",
   "repository": "https://github.com/PandemicMoon/hackertyper",
   "devDependencies": {
+    "electron-builder": "^5.23.2",
+    "electron-packager": "^7.5.1",
     "electron-prebuilt": "^1.2.0"
   },
   "build": {
-    "appId": "com.electron.${name}",
     "app-category-type": "public.app-category.developer-tools",
     "productName": "HackerTyper",
     "win": {
-      "iconUrl": ""
+      "iconUrl": "https://github.com/PandemicMoon/hackertyper/blob/master/build/icon.ico?raw=true",
+      "target": "nsis"
     }
   }
 }
