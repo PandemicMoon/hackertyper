@@ -2,7 +2,7 @@
   "name": "hackertyper-desktop-application",
   "version": "1.0.5",
   "description": "A HackerTyper Desktop Application based on hackertyper.net",
-  "main": "main.js",
+  "main": "app/main.js",
   "scripts": {
     "postinstall": "install-app-deps",
     "start": "electron .",
