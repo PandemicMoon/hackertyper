@@ -1,0 +1,6 @@
+{
+  "name": "Hackertyper",
+  "tagline": "A HackerTyper Desktop Application based on hackertyper.net",
+  "body": "# HackerTyper Desktop Application\r\n\r\n**Fool your friends with a realistic looking hacker emulator.**\r\n\r\nHackerTyper Desktop Application is based on [hackertyper.net](http://hackertyper.net) by Simone Masiero.\r\n\r\n**For normal users, simply visit the [download](DOWNLOADS.md) page to get the latest version.**\r\n\r\n[![Screenshot](screenshot.png \"Screenshot\")](https://raw.githubusercontent.com/PandemicMoon/hackertyper/master/screenshot.png)\r\n\r\n## Contribute\r\n\r\nLearn about [contributing](CONTRIBUTING.md) to HackerTyper Desktop Application.\r\n\r\n#### License [CC0 (Public Domain)](LICENSE.md)\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
