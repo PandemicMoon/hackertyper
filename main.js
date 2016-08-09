@@ -47,11 +47,11 @@ const template = [
         {
             let file = dialog.showSaveDialog(
             {
-                defaultPath: "screenshot.jpg",
+                defaultPath: "screenshot.png",
                 filters: [
                 {
-                    name: 'JPEG',
-                    extensions: ['jpg']
+                    name: 'PNG',
+                    extensions: ['png']
                 }]
             });
             if (file)
@@ -59,7 +59,7 @@ const template = [
                 focusedWindow.capturePage(function(image)
                 {
                     var wstream = fs.createWriteStream(file);
-                    wstream.write(image.toJPEG(100));
+                    wstream.write(image.toPNG());
                     wstream.end();
                 });
             }

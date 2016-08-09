@@ -6,7 +6,7 @@ HackerTyper Desktop Application is based on [hackertyper.net](http://hackertyper
 
 **For normal users, simply visit the [download](DOWNLOADS.md) page to get the latest version.**
 
-![Screenshot](https://github.com/PandemicMoon/hackertyper/raw/master/screenshot.jpg "Screenshot")
+![Screenshot](screenshot.png "Screenshot")
 
 ## Contribute
 
