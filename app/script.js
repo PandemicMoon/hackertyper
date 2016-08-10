@@ -1,7 +1,10 @@
 const ipc = require('electron').ipcRenderer;
-const alertify = require('./js/alertify.js');
+const alertify = require('./vendor/alertify.js/js/alertify.js');
+const fs = require('fs');
+var $ = require('jquery');
 
-var alertOpen = false;
+let settings = ipc.sendSync("get-settings");
+let alertOpen = false;
 
 ipc.on('show-set-speed', function(event)
 {
@@ -42,6 +45,37 @@ ipc.on('set-speed', function(event, speed)
     Typer.speed = parseInt(speed);
 });
 
+ipc.on('show-preset-file-selector', function(event, files)
+{
+    alertOpen = true;
+    let options = files.slice(0);
+    for (let key in files)
+    {
+        let sep = Typer.file.includes("/") ? "/" : "\\"; //determine seperator
+        options[key] = files[key].substring(0, files[key].lastIndexOf(".")); //format file
+        options[key] = options[key].substring(options[key].lastIndexOf(sep) + 1, options[key].length); //finish formatting
+    }
+    alertify.okBtn("Open").select("", options,
+        function(val, ev)
+        {
+            // The click event is in the event variable, so you can use it here.
+            ev.preventDefault();
+            ipc.send('open', "./txt/" + files[val]);
+            alertOpen = false;
+        },
+        function(ev)
+        {
+            // The click event is in the event variable, so you can use it here.
+            ev.preventDefault();
+            alertOpen = false;
+        });
+});
+
+ipc.on('settings-changed', function(event, setting)
+{
+    settings = setting;
+});
+
 /*
  *(c) Copyright 2011 Simone Masiero. Some Rights Reserved.
  *This work is licensed under a Creative Commons Attribution-Noncommercial-Share Alike 3.0 License
@@ -69,8 +103,8 @@ var Typer = {
     deniedCount: 0, //times caps is pressed for Access Denied
     init: function()
     { // inizialize Hacker Typer
-        if (Typer.file === 'txt/kernel.txt')
-            Typer.file = __dirname + "/" + Typer.file;
+        if (Typer.file === "@default@")
+            Typer.file = settings.defaultFile;
         accessCountimer = setInterval(function()
         {
             Typer.updLstChr();

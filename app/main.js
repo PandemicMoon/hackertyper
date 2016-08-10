@@ -11,14 +11,39 @@ const
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
-const ipc = electron.ipcMain
+const ipc = electron.ipcMain;
+const optionsFile = app.getPath("userData") + "\\options.json";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let optionsWindow;
+
+try
+{
+    fs.accessSync(optionsFile, fs.F_OK);
+}
+catch (e)
+{
+    fs.writeFileSync(optionsFile, JSON.stringify(
+    {
+        defaultFile: "./txt/kernel.txt",
+        defaultSpeed: 3
+    }), 'utf-8');
+}
+let settings = JSON.parse(fs.readFileSync(optionsFile, 'utf8'));
+let rawSettings = JSON.parse(fs.readFileSync(optionsFile, 'utf8'));
+
+for (var key in settings)
+{
+    if (typeof settings[key] === "string" || settings[key] instanceof String)
+    {
+        settings[key] = replaceAll(settings[key], "@dirname@", __dirname);
+    }
+}
 
 //set default speed
-let speed = 3;
+let speed = settings.defaultSpeed;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -54,7 +79,41 @@ app.on('activate', function()
 ipc.on('set-speed', function(event, arg)
 {
     speed = parseInt(arg);
-})
+});
+
+ipc.on('open', function(event, file)
+{
+    mainWindow.loadURL('file://' + __dirname + '/index.html?file=' + file + '&speed=' + speed);
+});
+
+ipc.on('get-settings', function(event)
+{
+    event.returnValue = settings;
+});
+
+ipc.on('get-raw-settings', function(event)
+{
+    event.returnValue = rawSettings;
+});
+
+ipc.on('save-settings', function(event, setting)
+{
+    fs.writeFileSync(optionsFile, JSON.stringify(setting), 'utf-8');
+    settings = JSON.parse(fs.readFileSync(optionsFile, 'utf8'));
+    rawSettings = JSON.parse(fs.readFileSync(optionsFile, 'utf8'));
+
+    for (var key in settings)
+    {
+        if (typeof settings[key] === "string" || settings[key] instanceof String)
+        {
+            settings[key] = replaceAll(settings[key], "@dirname@", __dirname);
+        }
+    }
+
+    mainWindow.webContents.send("settings-changed", settings);
+    optionsWindow.webContents.send("settings-changed", settings);
+    optionsWindow.webContents.send("raw-settings-changed", rawSettings);
+});
 
 function createWindow()
 {
@@ -109,6 +168,38 @@ function createWindow()
     });
 }
 
+function showOptionsWindow(window)
+{
+    //get icon based on OS
+    let icon = "";
+    if (process.platform === 'win32') //windows
+        icon = 'img/logo.ico';
+    else //most likely linux, setting icon doesn't affect OSX
+        icon = 'img/512x512.png';
+
+    optionsWindow = new BrowserWindow(
+    {
+        parent: window,
+        width: 800,
+        height: 600,
+        icon: icon,
+        backgroundColor: '#fff',
+        fullscreenable: false
+    });
+
+    optionsWindow.setMenuBarVisibility(false);
+    optionsWindow.loadURL('file://' + __dirname + '/options.html');
+
+    // Emitted when the window is closed.
+    optionsWindow.on('closed', function()
+    {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        optionsWindow = null;
+    });
+}
+
 const template = [
 {
     label: 'File',
@@ -116,7 +207,6 @@ const template = [
     {
         role: 'open',
         label: 'Open',
-        accelerator: 'CmdOrCtrl+O',
         click(item, focusedWindow)
         {
             let file = dialog.showOpenDialog(
@@ -127,6 +217,14 @@ const template = [
             {
                 focusedWindow.loadURL('file://' + __dirname + '/index.html?file=' + file[0] + '&speed=' + speed);
             }
+        }
+    },
+    {
+        label: 'Open Preset',
+        click(item, focusedWindow)
+        {
+            let files = fs.readdirSync(__dirname + "\\txt");
+            focusedWindow.webContents.send("show-preset-file-selector", files);
         }
     },
     {
@@ -236,6 +334,13 @@ const template = [
         {
             focusedWindow.webContents.send("show-set-speed");
         }
+    },
+    {
+        label: 'More Options',
+        click(item, focusedWindow)
+        {
+            showOptionsWindow(focusedWindow);
+        }
     }]
 }];
 
@@ -299,3 +404,14 @@ if (process.platform === 'darwin')
         role: 'front'
     }];
 }
+
+String.prototype.replaceAll = function(search, replacement)
+{
+    var target = this;
+    return target.split(search).join(replacement);
+};
+
+function replaceAll(string, search, replacement)
+{
+    return string.split(search).join(replacement);
+};

@@ -1,6 +1,6 @@
 {
   "name": "hackertyper-desktop-application",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "A HackerTyper Desktop Application based on hackertyper.net",
   "main": "app/main.js",
   "scripts": {
@@ -20,6 +20,7 @@
       "email": "pandemic@moon-network.net",
       "url": "https://github.com/PandemicMoon"
   },
+  "license": "CC-BY-NC-SA-3.0",
   "bugs": {
     "url": "https://github.com/PandemicMoon/hackertyper/issues"
   },

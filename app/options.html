@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+
+        <title>HackerTyper Options</title>
+
+        <link href="options.css" rel="stylesheet" type="text/css">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="./vendor/bootstrap/css/bootstrap.min.css">
+
+    </head>
+
+    <body cz-shortcut-listen="true">
+
+        <div class="container">
+            <p><i>These options are still a work in progress. Changing these settings will
+                <b>NOT</b> affect your current session, meaning you have to restart HackerTyper for these changes to take effect (this is as intended).</i></p>
+
+            <p>
+                To load a preset file, accessable by the <code>Open Preset</code> menu option, use this format:
+                <code>./txt/{filename}.txt</code>, where you replace <code>{filename}</code> with the name of the file, as visible in the title bar.
+            </p>
+
+            <form onsubmit="return saveOptions(this);">
+                <div class="form-group">
+                    <label for="default-file">Default File</label>
+                    <input type="text" class="form-control" id="default-file" value="./txt/kernel.txt" required>
+                </div>
+                <div class="form-group">
+                    <label for="default-speed">Default Speed</label>
+                    <input type="text" class="form-control" id="default-speed" value="3" required>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+
+        <script src="options.js" type="text/javascript"></script>
+
+    </body>
+
+</html>
